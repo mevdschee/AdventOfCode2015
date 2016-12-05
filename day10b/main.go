@@ -1,10 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"strings"
 )
 
@@ -25,14 +23,6 @@ func lookAndSay(str []byte) []byte {
 }
 
 func main() {
-	f, _ := os.Open("test")
-	defer f.Close()
-	s := bufio.NewScanner(f)
-	for s.Scan() {
-		line := s.Text()
-		fmt.Println(line + "=" + string(lookAndSay([]byte(line))))
-	}
-
 	input, _ := ioutil.ReadFile("input")
 	input = []byte(strings.TrimSpace(string(input)))
 	for i := 0; i < 50; i++ {
