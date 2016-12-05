@@ -6,22 +6,6 @@ import (
 	"strings"
 )
 
-func lookAndSay(str []byte) []byte {
-	ch := str[0]
-	count := 0
-	result := []byte{}
-	for i := 0; i < len(str); i++ {
-		if str[i] != ch {
-			result = append(result, byte(48+count), ch)
-			ch = str[i]
-			count = 0
-		}
-		count++
-	}
-	result = append(result, byte(48+count), ch)
-	return result
-}
-
 func next(pwd []byte) []byte {
 	for i := 7; i >= 0; i-- {
 		pwd[i]++
