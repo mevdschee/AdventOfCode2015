@@ -27,7 +27,6 @@ func main() {
 	input = []byte(strings.TrimSpace(string(input)))
 	for i := 0; i < 40; i++ {
 		input = lookAndSay(input)
-		fmt.Printf("%v: %v\n", i, len(input))
 	}
 	fmt.Println(len(input))
 }
