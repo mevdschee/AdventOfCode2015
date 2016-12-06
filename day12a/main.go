@@ -28,7 +28,7 @@ func count(val interface{}) float64 {
 
 func main() {
 	input, _ := ioutil.ReadFile("input")
-	var data map[string]interface{}
+	var data interface{}
 	json.Unmarshal(input, &data)
 	fmt.Println(count(data))
 }
