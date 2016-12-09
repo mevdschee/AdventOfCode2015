@@ -139,7 +139,6 @@ func main() {
 			}
 			attack(boss, &you)
 			if you.health <= 0 {
-				fmt.Printf("lose: %v %v\n", costs, items)
 				if costs > most {
 					most = costs
 				}
