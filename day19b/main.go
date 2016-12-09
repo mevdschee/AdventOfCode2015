@@ -8,7 +8,8 @@ import (
 	"strings"
 )
 
-func replace(str, old, new string, next *map[string]bool) {
+func replace(str, old, new string, next *map[string]bool) bool {
+	replaced := false
 	p := len(str)
 	for {
 		p = strings.LastIndex(str[:p], old)
@@ -17,7 +18,9 @@ func replace(str, old, new string, next *map[string]bool) {
 		}
 		r := str[0:p] + new + str[p+len(old):]
 		(*next)[r] = true
+		replaced = true
 	}
+	return replaced
 }
 
 func main() {
@@ -25,7 +28,6 @@ func main() {
 	defer f.Close()
 	s := bufio.NewScanner(f)
 	trans := [][2]string{}
-	molecules := map[string]bool{"e": true}
 	for s.Scan() {
 		line := s.Text()
 		if line == "" {
@@ -36,20 +38,23 @@ func main() {
 		trans = append(trans, [2]string{parts[1], parts[2]})
 	}
 	s.Scan()
-	target := s.Text()
+	molecules := map[string]bool{s.Text(): true}
+	target := "e"
 	steps := 0
 	for {
 		steps++
 		next := map[string]bool{}
 		for molecule := range molecules {
 			for t := range trans {
-				replace(molecule, trans[t][0], trans[t][1], &next)
+				if replace(molecule, trans[t][1], trans[t][0], &next) {
+					break
+				}
 			}
 		}
 		molecules = next
-		fmt.Println(steps)
 		if molecules[target] {
 			break
 		}
 	}
+	fmt.Println(steps)
 }
