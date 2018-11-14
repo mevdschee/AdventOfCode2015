@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strconv"
+	"strings"
 )
 
 func main() {
 	input, _ := ioutil.ReadFile("input")
 	i := 0
 	for {
-		data := string(input) + strconv.Itoa(i)
+		data := strings.TrimSpace(string(input)) + strconv.Itoa(i)
 		sum := md5.Sum([]byte(data))
 		str := hex.EncodeToString(sum[:])
 		if str[0:5] == "00000" {
