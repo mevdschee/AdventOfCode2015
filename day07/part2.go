@@ -22,7 +22,7 @@ func parseUint16(value string) (uint16, error) {
 	return uint16(number), err
 }
 
-func run() {
+func run(print bool) {
 	for {
 		f, _ := os.Open("input")
 		defer f.Close()
@@ -75,16 +75,18 @@ func run() {
 		}
 		_, done := wires["a"]
 		if done {
-			fmt.Println(wires["a"])
+			if print {
+				fmt.Println(wires["a"])
+			}
 			break
 		}
 	}
 }
 
 func main() {
-	run()
+	run(false)
 	a := wires["a"]
 	wires = make(map[string]uint16)
 	wires["b"] = a
-	run()
+	run(true)
 }
