@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 type item struct {
@@ -21,13 +22,34 @@ type player struct {
 	armor  int
 }
 
-func items(file string) []item {
-	f, _ := os.Open(file)
-	defer f.Close()
-	s := bufio.NewScanner(f)
+func items() []item {
+	file :=`
+Weapons:    Cost  Damage  Armor
+Dagger        8     4       0
+Shortsword   10     5       0
+Warhammer    25     6       0
+Longsword    40     7       0
+Greataxe     74     8       0
+
+Armor:      Cost  Damage  Armor
+Leather      13     0       1
+Chainmail    31     0       2
+Splintmail   53     0       3
+Bandedmail   75     0       4
+Platemail   102     0       5
+
+Rings:      Cost  Damage  Armor
+Damage +1    25     1       0
+Damage +2    50     2       0
+Damage +3   100     3       0
+Defense +1   20     0       1
+Defense +2   40     0       2
+Defense +3   80     0       3
+`
+	lines := strings.Split(file, "\n")
 	items := []item{}
-	for i := 0; s.Scan(); i++ {
-		line := s.Text()
+	for _, line := range lines {
+		line = strings.Replace(line, " +", "", 1)
 		re := regexp.MustCompile("^([a-zA-Z0-9]+)\\s+([0-9]+)\\s+([0-9]+)\\s+([0-9]+)$")
 		parts := re.FindStringSubmatch(line)
 		if len(parts) == 0 {
@@ -125,7 +147,7 @@ func attack(attacker player, defender *player) {
 }
 
 func main() {
-	items := items("items")
+	items := items()
 	configs := configs(items)
 	least := 100
 	for _, items := range configs {
