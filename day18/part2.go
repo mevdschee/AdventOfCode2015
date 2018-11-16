@@ -19,6 +19,10 @@ func main() {
 			}
 		}
 	}
+	field[0][0] = true
+	field[99][0] = true
+	field[0][99] = true
+	field[99][99] = true
 	for i := 0; i < 100; i++ {
 		next := [100][100]bool{}
 		next[0][0] = true
