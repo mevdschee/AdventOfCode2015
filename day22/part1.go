@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"regexp"
-	"sort"
 	"strconv"
 )
 
@@ -116,35 +115,45 @@ func timer(player, defender player) (player, player) {
 	return player, defender
 }
 
-func play(mana int, you, boss player, spells map[string]spell) int {
-	results := []int{}
+func min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}
+
+func play(mana int, you, boss player, spells map[string]spell, max, depth int) int {
+	result := 10000
+	if depth == 0 || mana > max {
+		return result
+	}
 	for name, spell := range spells {
 		nyou, nboss, ended := cast(name, spell, you, boss)
 		if ended {
 			if nboss.health <= 0 {
-				results = append(results, mana+spell.cost)
+				result = min(result, mana+spell.cost)
 			}
 			continue
 		}
 		nboss, nyou, ended = attack(nboss, nyou)
 		if ended {
 			if nboss.health <= 0 {
-				results = append(results, mana+spell.cost)
+				result = min(result, mana+spell.cost)
 			}
 			continue
 		}
-		results = append(results, play(mana+spell.cost, nyou, nboss, spells))
+		result = min(result, play(mana+spell.cost, nyou, nboss, spells, max, depth-1))
 	}
-	sort.Ints(results)
-	if len(results) > 0 {
-		return results[0]
-	}
-	return 10000
+	return result
 }
 
 func main() {
-	spells := spells()
-	you := you(50, 500)
-	boss := read("input")
-	fmt.Println(play(0, you, boss, spells))
+	min := 10000
+	for i := 1; i < 20; i++ {
+		spells := spells()
+		you := you(50, 500)
+		boss := read("input")
+		min = play(0, you, boss, spells, min, i)
+	}
+	fmt.Println(min)
 }
