@@ -149,7 +149,7 @@ func play(mana int, you, boss player, spells map[string]spell, max, depth int) i
 
 func main() {
 	min := 10000
-	for i := 1; i < 20; i++ {
+	for i := 1; min == 10000; i++ {
 		spells := spells()
 		you := you(50, 500)
 		boss := read("input")
