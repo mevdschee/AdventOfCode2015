@@ -28,12 +28,12 @@ func split(prefix1 []int, prefix2 []int, prefix3 []int, sum1, sum2, sum3, target
 	}
 }
 
-func dfs(prefix []int, sum, best, target int, skipped, numbers []int, results *[][4][]int) {
+func dfs(prefix []int, sum, best, target int, numbers []int, results *[][4][]int) {
 	if sum > target {
 		return
 	}
 	if sum == target {
-		newNumbers := append(append([]int{}, skipped...), numbers...)
+		newNumbers := append([]int{}, numbers...)
 		newPrefix := append([]int{}, prefix...)
 		results2 := [][3][]int{}
 		split([]int{}, []int{}, []int{}, 0, 0, 0, target, newNumbers, &results2)
@@ -44,13 +44,12 @@ func dfs(prefix []int, sum, best, target int, skipped, numbers []int, results *[
 	}
 	if len(prefix) < best {
 		for i, number := range numbers {
-			newSkipped := append(append([]int{}, skipped...), numbers[:i]...)
-			newNumbers := append([]int{}, numbers[i+1:]...)
+			newNumbers := append(append([]int{}, numbers[:i]...), numbers[i+1:]...)
 			newBest := len(prefix) + len(numbers)
 			if len(*results) > 0 {
-				newBest = len((*results)[0])
+				newBest = len((*results)[0][0])
 			}
-			dfs(append(prefix, number), sum+number, newBest, target, newSkipped, newNumbers, results)
+			dfs(append(prefix, number), sum+number, newBest, target, newNumbers, results)
 		}
 	}
 }
@@ -69,7 +68,7 @@ func main() {
 	part := total / 4
 	sort.Sort(sort.Reverse(sort.IntSlice(numbers)))
 	results := [][4][]int{}
-	dfs([]int{}, 0, len(numbers), part, []int{}, numbers, &results)
+	dfs([]int{}, 0, len(numbers), part, numbers, &results)
 	lowest := -1
 	for _, result := range results {
 		product := 1
